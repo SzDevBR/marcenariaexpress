@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcenaria Express - Móveis Sob Medida em 8 Dias</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        dark: {
+                            900: '#121212',
+                            800: '#1E1E1E',
+                            700: '#2D2D2D',
+                            600: '#3D3D3D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #f8fafc;
+            scroll-behavior: smooth;
+        }
+        
+        /* Hero Slider */
+        .hero-slide {
+            transition: opacity 0.8s ease-in-out;
+        }
+        
+        /* Cards 3D */
+        .product-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover {
+            transform: perspective(1000px) rotateY(5deg) rotateX(5deg) translateZ(10px);
+        }
+        
+        /* Timeline */
+        .timeline-item {
+            position: relative;
+        }
+        
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            height: 60px;
+            border-left: 2px dashed #10B981;
+        }
+        
+        /* Portfolio hover */
+        .portfolio-item {
+            overflow: hidden;
+        }
+        
+        .portfolio-item img {
+            transition: transform 0.5s ease;
+        }
+        
+        .portfolio-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Before/After Slider */
+        .comparison-slider {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .before-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            overflow: hidden;
+        }
+        
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: white;
+            cursor: ew-resize;
+        }
+        
+        .slider-handle:after {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: -14px;
+            transform: translateY(-50%);
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        /* Menu mobile */
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        /* WhatsApp pulse */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-gray-100">
+    <!-- WhatsApp Fixed Button -->
+    <a href="https://wa.me/5562995518461?text=Olá! Gostaria de solicitar um orçamento." target="_blank" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-2xl shadow-lg pulse">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Header / Navbar -->
+    <header class="fixed w-full bg-dark-800 bg-opacity-90 backdrop-blur-sm py-4 z-40">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center">
+                <img src="assets/logo.png" alt="Marcenaria Express" class="h-10">
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="#inicio" class="hover:text-primary transition-colors">Início</a>
+                <a href="#sobre" class="hover:text-primary transition-colors">Sobre</a>
+                <a href="#como-funciona" class="hover:text-primary transition-colors">Como Funciona</a>
+                <a href="#portfolio" class="hover:text-primary transition-colors">Portfólio</a>
+                <a href="#projetos" class="hover:text-primary transition-colors">Projetos</a>
+                <a href="#depoimentos" class="hover:text-primary transition-colors">Depoimentos</a>
+                <a href="#blog" class="hover:text-primary transition-colors">Blog</a>
+                <a href="#contato" class="hover:text-primary transition-colors">Contato</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- WhatsApp Button Desktop -->
+            <a href="https://wa.me/5562995518461?text=Olá! Gostaria de solicitar um orçamento." target="_blank" class="hidden md:flex items-center bg-primary hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                <i class="fab fa-whatsapp mr-2"></i> Orçamento
+            </a>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-dark-900 bg-opacity-95 z-50 flex flex-col items-center justify-center transform -translate-y-full">
+        <button id="close-menu" class="absolute top-6 right-6 text-3xl text-white">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <nav id="mobile-nav" class="flex flex-col items-center space-y-8 text-2xl">
+            <a href="#inicio" data-target="inicio" class="mobile-nav-link hover:text-primary transition-colors text-white">Início</a>
+            <a href="#sobre" data-target="sobre" class="mobile-nav-link hover:text-primary transition-colors text-white">Sobre</a>
+            <a href="#como-funciona" data-target="como-funciona" class="mobile-nav-link hover:text-primary transition-colors text-white">Como Funciona</a>
+            <a href="#portfolio" data-target="portfolio" class="mobile-nav-link hover:text-primary transition-colors text-white">Portfólio</a>
+            <a href="#projetos" data-target="projetos" class="mobile-nav-link hover:text-primary transition-colors text-white">Projetos</a>
+            <a href="#depoimentos" data-target="depoimentos" class="mobile-nav-link hover:text-primary transition-colors text-white">Depoimentos</a>
+            <a href="#blog" data-target="blog" class="mobile-nav-link hover:text-primary transition-colors text-white">Blog</a>
+            <a href="#contato" data-target="contato" class="mobile-nav-link hover:text-primary transition-colors text-white">Contato</a>
+        </nav>
+
+        <script>
+        (function(){
+          const links = document.querySelectorAll('#mobile-nav .mobile-nav-link');
+          const observedSections = Array.from(links)
+            .map(l => document.getElementById(l.dataset.target))
+            .filter(Boolean);
+
+          // IntersectionObserver to update active link as user scrolls
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (!entry.isIntersecting) return;
+              const id = entry.target.id;
+              links.forEach(link => {
+                if (link.dataset.target === id) {
+                  link.classList.add('text-primary');
+                  link.setAttribute('aria-current', 'true');
+                } else {
+                  link.classList.remove('text-primary');
+                  link.removeAttribute('aria-current');
+                }
+              });
+            });
+          }, { root: null, threshold: 0.55 });
+
+          observedSections.forEach(s => io.observe(s));
+
+          // Close mobile menu when clicking a link
+          links.forEach(link => {
+            link.addEventListener('click', () => {
+              const mobileMenu = document.getElementById('mobile-menu');
+              if (mobileMenu) {
+                mobileMenu.classList.add('-translate-y-full');
+                document.body.style.overflow = 'auto';
+              }
+            });
+          });
+        })();
+        </script>
+        
+        <div class="mt-12">
+            <a href="https://wa.me/5562995518461?text=Olá! Gostaria de solicitar um orçamento." target="_blank" class="flex items-center bg-primary hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors text-xl">
+                <i class="fab fa-whatsapp mr-2"></i> Orçamento pelo WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="relative h-screen flex items-center justify-center overflow-hidden">
+            <!-- Hero Slider -->
+            <div class="absolute inset-0">
+                <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0" style="background-image: url('assets/closet.jpg')"></div>
+                <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0" style="background-image: url('assets/kit-cabide.jpg')"></div>
+                <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0" style="background-image: url('assets/guarda-roupa.jpg')"></div>
+                <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+            </div>
+
+            <!-- Hero Content -->
+            <div class="container mx-auto px-4 z-30 text-center animate-fade-in">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Móveis sob medida em apenas 8 dias</h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Mais de 10.000 clientes felizes em Goiás.</p>
+                <a href="https://wa.me/5562995518461?text=Olá! Gostaria de solicitar um orçamento." target="_blank" class="inline-flex items-center bg-primary hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-lg md:text-xl transition-colors">
+                    <i class="fab fa-whatsapp mr-2"></i> Pedir Orçamento no WhatsApp
+                </a>
+                
+                <div class="mt-8 flex items-center justify-center">
+                    <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-full py-2 px-4 flex items-center">
+                        <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center mr-2">
+                            <i class="fas fa-check text-xs text-white"></i>
+                        </div>
+                        <span class="text-sm md:text-base">Entrega Garantida em 8 dias</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sobre Section -->
+        <section id="sobre" class="py-20 bg-dark-800">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                        <img src="assets/closet.jpg" alt="Equipe Marcenaria Express" class="rounded-lg shadow-xl">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6">Sobre a Marcenaria Express</h2>
+                        <p class="text-lg mb-8">Mais que móveis, realizamos sonhos com design, praticidade e rapidez. Somos referência em Goiás pela qualidade e pelo prazo de apenas 8 dias.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-dark-700 p-5 rounded-lg hover:bg-dark-600 transition-colors">
+                                <div class="text-primary text-2xl mb-3">
+                                    <i class="fas fa-ruler-combined"></i>
+                                </div>
+                                <h3 class="font-semibold mb-2">Sob medida para você</h3>
+                                <p class="text-gray-400">Projetos personalizados para seu espaço</p>
+                            </div>
+                            
+                            <div class="bg-dark-700 p-5 rounded-lg hover:bg-dark-600 transition-colors">
+                                <div class="text-primary text-2xl mb-3">
+                                    <i class="fas fa-shipping-fast"></i>
+                                </div>
+                                <h3 class="font-semibold mb-2">Entrega rápida em 8 dias</h3>
+                                <p class="text-gray-400">Compromisso com prazos curtos</p>
+                            </div>
+                            
+                            <div class="bg-dark-700 p-5 rounded-lg hover:bg-dark-600 transition-colors">
+                                <div class="text-primary text-2xl mb-3">
+                                    <i class="fas fa-medal"></i>
+                                </div>
+                                <h3 class="font-semibold mb-2">Qualidade comprovada</h3>
+                                <p class="text-gray-400">Materiais de primeira linha</p>
+                            </div>
+                            
+                            <div class="bg-dark-700 p-5 rounded-lg hover:bg-dark-600 transition-colors">
+                                <div class="text-primary text-2xl mb-3">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <h3 class="font-semibold mb-2">Instalação profissional</h3>
+                                <p class="text-gray-400">Incluída em todos os projetos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Como Funciona Section (versão aprimorada) -->
+        <section id="como-funciona" class="py-24 bg-dark-900">
+            <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Como funciona — do papel à instalação em 4 passos</h2>
+                <p class="text-gray-400 mx-auto max-w-2xl">Processo transparente, prazos definidos e atendimento dedicado. Veja como transformamos sua ideia em móveis sob medida em apenas 8 dias.</p>
+            </div>
+
+            <div class="relative mt-12">
+                <!-- Linha conectora (aparece em desktop) -->
+                <div class="hidden md:block absolute top-28 left-12 right-12 h-1 bg-gradient-to-r from-primary to-green-400 opacity-20 rounded z-0"></div>
+
+                <!-- Timeline (grid em desktop, coluna em mobile) -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto px-4">
+                <!-- Step 1 -->
+                <div role="listitem" class="relative z-10 flex">
+                    <div class="w-full bg-dark-800 p-6 rounded-lg border border-gray-700 hover:shadow-lg transform transition hover:-translate-y-1 flex flex-col items-center text-center">
+                    <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-white text-xl mb-4">
+                        <i class="fas fa-headset" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">1. Consultoria & Medição</h3>
+                    <p class="text-gray-400 text-sm mb-3">Atendimento rápido por WhatsApp ou visita técnica. Coletamos medidas e necessidades.</p>
+                    
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div role="listitem" class="relative z-10 flex">
+                    <div class="w-full bg-dark-800 p-6 rounded-lg border border-gray-700 hover:shadow-lg transform transition hover:-translate-y-1 flex flex-col items-center text-center">
+                    <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-white text-xl mb-4">
+                        <i class="fas fa-pencil-ruler" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">2. Projeto & Aprovação</h3>
+                    <p class="text-gray-400 text-sm mb-3">Enviamos layout e opções de acabamento. Você aprova e ajustamos até ficar perfeito.</p>
+                    
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div role="listitem" class="relative z-10 flex">
+                    <div class="w-full bg-dark-800 p-6 rounded-lg border border-gray-700 hover:shadow-lg transform transition hover:-translate-y-1 flex flex-col items-center text-center">
+                    <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-white text-xl mb-4">
+                        <i class="fas fa-industry" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">3. Produção Express</h3>
+                    <p class="text-gray-400 text-sm mb-3">Fabricação em nossa unidade com controle de qualidade. Produzimos sob medida e com agilidade.</p>
+                    
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div role="listitem" class="relative z-10 flex">
+                    <div class="w-full bg-dark-800 p-6 rounded-lg border border-gray-700 hover:shadow-lg transform transition hover:-translate-y-1 flex flex-col items-center text-center">
+                    <div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-white text-xl mb-4">
+                        <i class="fas fa-truck-loading" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">4. Entrega & Instalação</h3>
+                    <p class="text-gray-400 text-sm mb-3">Montagem profissional no local, com limpeza e checagem final. Garantia em todos os serviços.</p>
+                    <p class="text-xs text-gray-500">Garantia: assistência pós-instalação</p>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- CTA e diferenciais (melhorada, acessível e responsiva) -->
+        <section aria-labelledby="cta-heading" class="py-12 bg-dark-800">
+            <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto bg-dark-900 bg-opacity-60 backdrop-blur-sm rounded-xl p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 shadow-lg border border-gray-800">
+                <!-- Texto e CTAs -->
+                <div class="flex-1 text-center md:text-left">
+                <h3 id="cta-heading" class="text-2xl md:text-3xl font-bold mb-2">Pronto para começar seu projeto?</h3>
+                <p class="text-gray-400 mb-4">Atendimento dedicado, aprovação rápida e instalação profissional. Acabamento premium com prazo de entrega em até 8 dias úteis.</p>
+
+                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-3 justify-center md:justify-start">
+                    <a href="https://wa.me/5562995518461?text=Olá!%20Quero%20iniciar%20um%20projeto%20sob%20medida." target="_blank" class="inline-flex items-center bg-primary hover:bg-green-600 text-white font-semibold py-3 px-5 rounded-lg shadow-md" aria-label="Solicitar orçamento via WhatsApp">
+                    <i class="fab fa-whatsapp mr-2"></i> Solicitar orçamento
+                    </a>
+
+                    <a href="#portfolio" class="inline-flex items-center text-gray-300 hover:text-white py-3 px-4 rounded-lg" aria-label="Ver portfólio e inspirações">
+                    <i class="fas fa-images mr-2"></i> Ver portfólio
+                    </a>
+                </div>
+                </div>
+
+                <!-- Diferenciais / badges -->
+                <div class="w-full md:w-64 grid grid-cols-1 gap-3">
+                <div class="flex items-center gap-3 bg-dark-800 p-3 rounded-lg border border-gray-700">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white">
+                    <i class="fas fa-stopwatch" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                    <div class="text-sm font-semibold">Entrega em 8 dias</div>
+                    <div class="text-xs text-gray-400">Produção + instalação</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-dark-800 p-3 rounded-lg border border-gray-700">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white">
+                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                    <div class="text-sm font-semibold">Garantia & suporte</div>
+                    <div class="text-xs text-gray-400">Assistência pós-instalação</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-dark-800 p-3 rounded-lg border border-gray-700">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white">
+                    <i class="fas fa-check-circle" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                    <div class="text-sm font-semibold">Acabamento premium</div>
+                    <div class="text-xs text-gray-400">Materiais selecionados</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <p class="text-center text-gray-500 mt-4 text-sm">Atendimento online e visita técnica disponível. Clique em "Solicitar orçamento" para iniciar pelo WhatsApp.</p>
+            </div>
+        </section>
+
+        <!-- Portfólio Section -->
+        <section id="portfolio" class="py-20 bg-dark-800">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Portfólio / Inspirações</h2>
+                <p class="text-center text-gray-400 mb-12">Do papel para a realidade • Minimalismo que encanta • Design inteligente que chega rápido</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Portfolio Items -->
+                    <div class="portfolio-item rounded-lg overflow-hidden relative group">
+                        <img src="assets/closet.jpg" alt="Projeto 1" class="w-full h-64 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Closet Moderno</h3>
+                                <p class="text-gray-300">Closets sob medida para organizar e deixar sua casa mais organizada</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="portfolio-item rounded-lg overflow-hidden relative group">
+                        <img src="assets/expositor.jpg" alt="Projeto 2" class="w-full h-64 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Expositor</h3>
+                                <p class="text-gray-300">Expositor sob medida para destacar seus itens com elegância e praticidade</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="portfolio-item rounded-lg overflow-hidden relative group">
+                        <img src="assets/guarda-roupa.jpg" alt="Projeto 3" class="w-full h-64 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Guarda-roupa Casal</h3>
+                                <p class="text-gray-300">Planeje seu guarda-roupas</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="portfolio-item rounded-lg overflow-hidden relative group">
+                        <img src="assets/armario.jpg" alt="Projeto 4" class="w-full h-64 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Armário de cozinha compacto e moderno</h3>
+                                <p class="text-gray-300">Armários planejados e modernos</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="portfolio-item rounded-lg overflow-hidden relative group">
+                        <img src="assets/office.jpg" alt="Projeto 5" class="w-full h-64 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Escrivaninha/Office</h3>
+                                <p class="text-gray-300">Escrivaninha com estilo e conforto</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="portfolio-item rounded-lg overflow-hidden relative group">
+                        <img src="assets/colmeia.jpg" alt="Projeto 6" class="w-full h-64 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Colmeia</h3>
+                                <p class="text-gray-300">Colmeia com design moderno</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-12">
+                    <a href="https://www.instagram.com/marcenariaexpress_/" target="_blank" class="inline-flex items-center text-primary hover:text-green-400 transition-colors">
+                        <i class="fab fa-instagram text-2xl mr-2"></i>
+                        <span>Acompanhe mais projetos no nosso Instagram</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tipos de Projetos Section -->
+        <section id="projetos" class="py-20 bg-dark-900">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Tipos de Projetos</h2>
+                
+                <!-- Tabs -->
+                <div class="flex justify-center mb-12">
+                    <div class="flex border-b border-gray-700">
+                        <button class="tab-button py-3 px-6 border-b-2 border-primary font-semibold" data-tab="residencial">
+                            Residenciais
+                        </button>
+                        <button class="tab-button py-3 px-6 border-b-2 border-transparent font-semibold" data-tab="comercial">
+                            Comerciais
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="tab-content" id="residencial">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-6">Projetos Residenciais</h3>
+                            <p class="text-gray-400 mb-6">Transformamos sua casa com móveis que combinam funcionalidade, estilo e personalização, criando ambientes únicos e aconchegantes.</p>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Cozinhas</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Closets</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Painéis</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Quartos</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Home Office</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Área de Serviço</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <img src="assets/armario.jpg" class="rounded-lg shadow-xl">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content hidden" id="comercial">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-6">Projetos Comerciais</h3>
+                            <p class="text-gray-400 mb-6">Tá montando sua loja? A gente resolve! Desenvolvemos móveis comerciais que potencializam suas vendas e otimizam seu espaço.</p>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Vitrines</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Expositores</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Balcões</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Lojas</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Estantes</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+                                    <span>Display</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <img src="assets/comercial.jpg" alt="Projeto Comercial" class="rounded-lg shadow-xl">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-16 bg-dark-800 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4">Atendemos em toda Goiás</h3>
+                    <p class="text-gray-400 mb-6">Atendemos Anápolis, Goiânia, Aparecida e Senador Canedo. Entre em contato para verificar a disponibilidade em sua região.</p>
+                    
+                    <!-- Google Maps Embed -->
+                    <div class="rounded-lg overflow-hidden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d122520.14887912475!2d-49.02691851093751!3d-16.335475784791583!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ebb0c233534c3%3A0x6c8fdcbadf735cfa!2sSander%20M%C3%B3veis%20Planejados%20-%20An%C3%A1polis%20-%20Marcenaria%20sob%20medida!5e0!3m2!1spt-BR!2sbr!4v1757098572078!5m2!1spt-BR!2sbr" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Produtos em Destaque Section -->
+        <section class="py-20 bg-dark-800">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Produtos em Destaque</h2>
+                
+                <!-- Product 1 -->
+                <div class="flex flex-col md:flex-row items-center mb-20">
+                    <div class="md:w-1/2 mb-10 md:mb-0 product-card">
+                        <img src="assets/cabideiro.png" alt="Cabideiro em MDF" class="rounded-lg shadow-xl">
+                    </div>
+                    <div class="md:w-1/2 md:pl-12">
+                        <h3 class="text-2xl md:text-3xl font-semibold mb-4">Cabideiro em MDF</h3>
+                        <p class="text-gray-400 mb-6">Cabideiro em MDF de alta qualidade, feito sob medida para você. Personalize as dimensões e receba montado direto na sua casa.</p>
+                        <ul class="mb-6 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary mr-2"></i>
+                                <span>Material resistente e durável</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary mr-2"></i>
+                                <span>Design moderno e funcional</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary mr-2"></i>
+                                <span>Montagem profissional inclusa</span>
+                            </li>
+                        </ul>
+                        <a href="https://wa.me/5562995518461?text=Olá! Gostaria de solicitar um orçamento para um cabideiro." target="_blank" class="inline-flex items-center bg-primary hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i> Peça agora pelo WhatsApp
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 md:pr-12 order-2 md:order-1">
+                        <h3 class="text-2xl md:text-3xl font-semibold mb-4">Armário</h3>
+                        <p class="text-gray-400 mb-6">Armário sob medida com portas de correr, planejado especialmente para atender às necessidades da nossa cliente. Design funcional, acabamento impecável e entrega rápida.</p>
+                        <ul class="mb-6 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary mr-2"></i>
+                                <span>Espaço otimizado</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary mr-2"></i>
+                                <span>Portas de correr suaves</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary mr-2"></i>
+                                <span>Acabamento premium</span>
+                            </li>
+                        </ul>
+                        <a href="https://wa.me/5562995518461?text=Olá! Gostaria de solicitar um orçamento para um armário." target="_blank" class="inline-flex items-center bg-primary hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i> Peça agora pelo WhatsApp
+                        </a>
+                    </div>
+                    <div class="md:w-1/2 mb-10 md:mb-0 product-card order-1 md:order-2">
+                        <img src="assets/armario.png" alt="Armário com Portas de Correr" class="rounded-lg shadow-xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estatísticas Section -->
+        <section class="py-20 bg-dark-900">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Por que escolher a Marcenaria Express?</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-dark-800 p-8 rounded-lg">
+                        <div class="text-5xl font-bold text-primary mb-4" id="years-counter">0</div>
+                        <h3 class="text-xl font-semibold mb-2">Anos de experiência</h3>
+                        <p class="text-gray-400">Tradição e expertise em marcenaria</p>
+                    </div>
+                    
+                    <div class="bg-dark-800 p-8 rounded-lg">
+                        <div class="text-5xl font-bold text-primary mb-4" id="clients-counter">0</div>
+                        <h3 class="text-xl font-semibold mb-2">+ Clientes atendidos</h3>
+                        <p class="text-gray-400">Satisfação garantida em cada projeto</p>
+                    </div>
+                    
+                    <div class="bg-dark-800 p-8 rounded-lg">
+                        <div class="text-5xl font-bold text-primary mb-4" id="cities-counter">0</div>
+                        <h3 class="text-xl font-semibold mb-2">Cidades atendidas</h3>
+                        <p class="text-gray-400">Presença em toda região de Goiás</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Depoimentos Section -->
+        <section id="depoimentos" class="py-20 bg-dark-800">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">O que nossos clientes dizem</h2>
+                
+                <div class="relative">
+                    <!-- Depoimentos Carousel -->
+                    <div class="depoimentos-carousel overflow-hidden">
+                        <div class="flex transition-transform duration-500 ease-in-out">
+                            <!-- Depoimento 1 -->
+                            <div class="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                                <div class="bg-dark-700 p-6 rounded-lg h-full">
+                                    <div class="flex text-yellow-400 mb-4">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <p class="text-gray-300 mb-6">"Meu sonho saiu do papel em menos de 10 dias, ficou perfeito! A equipe foi super atenciosa e o resultado final superou minhas expectativas."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                            AC
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold">Ana Carvalho</h4>
+                                            <p class="text-gray-400 text-sm">Anápolis - GO</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Depoimento 2 -->
+                            <div class="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                                <div class="bg-dark-700 p-6 rounded-lg h-full">
+                                    <div class="flex text-yellow-400 mb-4">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <p class="text-gray-300 mb-6">"Equipe atenciosa, móveis lindos e entrega super rápida! Fizemos o closet do quarto principal e ficou exatamente como imaginávamos."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                            MR
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold">Marcos Ribeiro</h4>
+                                            <p class="text-gray-400 text-sm">Goiânia - GO</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Depoimento 3 -->
+                            <div class="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                                <div class="bg-dark-700 p-6 rounded-lg h-full">
+                                    <div class="flex text-yellow-400 mb-4">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <p class="text-gray-300 mb-6">"Preço justo, qualidade excelente e cumprem os prazos! Reformei toda a cozinha e área de serviço e amei o resultado. Recomendo!"</p>
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                            CS
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold">Carla Silva</h4>
+                                            <p class="text-gray-400 text-sm">Aparecida de Goiânia - GO</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Buttons -->
+                    <button class="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-1 bg-dark-700 hover:bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors carousel-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1 bg-dark-700 hover:bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors carousel-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Antes & Depois Section 
+        <section class="py-20 bg-dark-900">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Antes & Depois</h2>
+                <p class="text-center text-gray-400 mb-12">Transformamos ambientes com rapidez e sofisticação</p>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="comparison-slider rounded-lg overflow-hidden shadow-xl">
+                        <img src="assets/antes.png" alt="Depois" class="w-full">
+                        <div class="before-image">
+                            <img src="" alt="Antes" class="w-full">
+                        </div>
+                        <div class="slider-handle"></div>
+                    </div>
+                </div>
+            </div>
+        </section>-->
+
+        <!-- Contato Section -->
+        <section id="contato" class="py-20 bg-gradient-to-br from-dark-800 to-primary">
+            <div class="container mx-auto px-4">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Entre em Contato</h2>
+                    <p class="text-xl mb-10">Fale com a gente agora mesmo e receba atendimento rápido pelo WhatsApp.</p>
+                    
+                    <form id="contact-form" class="bg-dark-800 bg-opacity-70 backdrop-blur-sm p-8 rounded-lg text-left">
+                        <div class="mb-6">
+                            <label for="name" class="block text-gray-300 mb-2">Nome</label>
+                            <input type="text" id="name" class="w-full bg-dark-700 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="phone" class="block text-gray-300 mb-2">Telefone</label>
+                            <input type="tel" id="phone" class="w-full bg-dark-700 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-300 mb-2">Mensagem</label>
+                            <textarea id="message" rows="4" class="w-full bg-dark-700 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-primary hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i> Enviar mensagem pelo WhatsApp
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Final Section -->
+        <section class="py-16 bg-gradient-to-br from-primary to-dark-900">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Faça seu orçamento no WhatsApp agora mesmo!</h2>
+                <p class="text-xl mb-8">Garanta sua vaga na produção da semana.</p>
+                
+                <a href="https://wa.me/5562995518461?text=Olá! Gostaria de solicitar um orçamento." target="_blank" class="inline-flex items-center bg-white hover:bg-gray-100 text-dark-900 font-bold py-4 px-8 rounded-lg text-lg md:text-xl transition-colors">
+                    <i class="fab fa-whatsapp mr-2"></i> Quero meu orçamento!
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-900 pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <img src="assets/logo.png" alt="Marcenaria Express" class="h-10 mb-6">
+                    <p class="text-gray-400 mb-6">Marcenaria Express – móveis sob medida em 8 dias 🚀</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/marcenariaexpress_/" target="_blank" class="text-gray-400 hover:text-primary transition-colors text-xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/5562995518461" target="_blank" class="text-gray-400 hover:text-primary transition-colors text-xl">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Links Rápidos</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#inicio" class="text-gray-400 hover:text-primary transition-colors">Início</a></li>
+                        <li><a href="#sobre" class="text-gray-400 hover:text-primary transition-colors">Sobre</a></li>
+                        <li><a href="#portfolio" class="text-gray-400 hover:text-primary transition-colors">Portfólio</a></li>
+                        <li><a href="https://wa.me/5562995518461" class="text-gray-400 hover:text-primary transition-colors">Orçamento</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Contato</h3>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fab fa-whatsapp text-primary mr-3 mt-1"></i>
+                            <span>(62) 99551-8461</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fab fa-instagram text-primary mr-3 mt-1"></i>
+                            <span>@marcenariaexpress_</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-primary mr-3 mt-1"></i>
+                            <span>Av. Juscelino Kubitscheck, N° 2775 - JK Nova Capital, Anápolis - GO</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
+                <p>Copyright © 2025 Marcenaria Express. Todos os direitos reservados.</p>
+                <p class="mt-2">
+                    Torne este conceito realidade para seus clientes. Criado por
+                    <a href="https://wa.me/5562998641905" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-green-400">@octaviouwx</a>
+                </br>
+            </br>
+                    <a href="https://iam.uwapps.com.br/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm text-gray-300 bg-transparent border border-gray-700 hover:bg-gray-800 hover:text-white hover:border-primary transition-colors px-3 py-1 rounded-full ml-3" aria-label="Ver portfólio de Octavio">
+                        <i class="fas fa-external-link-alt"></i>
+                        Portfólio
+                    </a>
+                </p></div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('-translate-y-full');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('-translate-y-full');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Hero Slider
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        let currentSlide = 0;
+        
+        function showSlide(n) {
+            heroSlides.forEach(slide => slide.style.opacity = 0);
+            heroSlides[n].style.opacity = 1;
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % heroSlides.length;
+            showSlide(currentSlide);
+        }
+        
+        // Start slideshow
+        showSlide(0);
+        setInterval(nextSlide, 5000);
+        
+        // Tabs
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.dataset.tab;
+                
+                // Update buttons
+                tabButtons.forEach(btn => btn.classList.remove('border-primary', 'text-primary'));
+                tabButtons.forEach(btn => btn.classList.add('border-transparent', 'text-gray-400'));
+                button.classList.add('border-primary', 'text-primary');
+                button.classList.remove('border-transparent', 'text-gray-400');
+                
+                // Update contents
+                tabContents.forEach(content => content.classList.add('hidden'));
+                document.getElementById(tab).classList.remove('hidden');
+            });
+        });
+        
+        // Counter Animation
+        const counters = document.querySelectorAll('[id$="-counter"]');
+        let counted = false;
+        
+        function animateCounters() {
+            if (counted) return;
+            
+            const yearsCounter = document.getElementById('years-counter');
+            const clientsCounter = document.getElementById('clients-counter');
+            const citiesCounter = document.getElementById('cities-counter');
+            
+            animateCounter(yearsCounter, 12, 2000);
+            animateCounter(clientsCounter, 10000, 2000);
+            animateCounter(citiesCounter, 4, 2000);
+            
+            counted = true;
+        }
+        
+        function animateCounter(element, target, duration) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            const updateCounter = () => {
+                start += increment;
+                if (start >= target) {
+                    element.textContent = target.toLocaleString();
+                    return;
+                }
+                
+                element.textContent = Math.floor(start).toLocaleString();
+                requestAnimationFrame(updateCounter);
+            };
+            
+            updateCounter();
+        }
+        
+        // Check if counters are in viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+        
+        function checkCounters() {
+            if (counters[0] && isInViewport(counters[0])) {
+                animateCounters();
+            }
+        }
+        
+        window.addEventListener('scroll', checkCounters);
+        checkCounters(); // Check on load
+        
+        // Carousel
+        const carousel = document.querySelector('.depoimentos-carousel');
+        const carouselItems = document.querySelectorAll('.depoimentos-carousel > div > div');
+        const carouselNext = document.querySelector('.carousel-next');
+        const carouselPrev = document.querySelector('.carousel-prev');
+        
+        let currentItem = 0;
+        const itemsToShow = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+        
+        function updateCarousel() {
+            const itemWidth = carouselItems[0].offsetWidth + 32; // width + padding
+            carousel.querySelector('div').style.transform = `translateX(-${currentItem * itemWidth}px)`;
+        }
+        
+        carouselNext.addEventListener('click', () => {
+            if (currentItem < carouselItems.length - itemsToShow) {
+                currentItem++;
+                updateCarousel();
+            }
+        });
+        
+        carouselPrev.addEventListener('click', () => {
+            if (currentItem > 0) {
+                currentItem--;
+                updateCarousel();
+            }
+        });
+        
+        window.addEventListener('resize', () => {
+            updateCarousel();
+        });
+        
+        // Before/After Slider
+        const slider = document.querySelector('.comparison-slider');
+        const beforeImage = document.querySelector('.before-image');
+        const handle = document.querySelector('.slider-handle');
+        
+        if (slider) {
+            let isMoving = false;
+            
+            handle.addEventListener('mousedown', () => {
+                isMoving = true;
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isMoving = false;
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isMoving) return;
+                
+                const sliderRect = slider.getBoundingClientRect();
+                let position = e.clientX - sliderRect.left;
+                
+                if (position < 0) position = 0;
+                if (position > sliderRect.width) position = sliderRect.width;
+                
+                const percentage = (position / sliderRect.width) * 100;
+                
+                beforeImage.style.width = `${percentage}%`;
+                handle.style.left = `${percentage}%`;
+            });
+            
+            // Touch events for mobile
+            handle.addEventListener('touchstart', () => {
+                isMoving = true;
+            });
+            
+            document.addEventListener('touchend', () => {
+                isMoving = false;
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (!isMoving) return;
+                
+                const sliderRect = slider.getBoundingClientRect();
+                let position = e.touches[0].clientX - sliderRect.left;
+                
+                if (position < 0) position = 0;
+                if (position > sliderRect.width) position = sliderRect.width;
+                
+                const percentage = (position / sliderRect.width) * 100;
+                
+                beforeImage.style.width = `${percentage}%`;
+                handle.style.left = `${percentage}%`;
+            });
+        }
+        
+        // WhatsApp Form
+        const contactForm = document.getElementById('contact-form');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+            
+            const text = `Olá! Meu nome é ${name}. ${message}. Telefone: ${phone}`;
+            const encodedText = encodeURIComponent(text);
+            
+            window.open(`https://wa.me/5562995518461?text=${encodedText}`, '_blank');
+        });
+        
+        // Initialize
+        updateCarousel();
+    </script>
+</body>
+</html>
